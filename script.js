@@ -35,3 +35,18 @@ window.addEventListener('scroll', updateProgress, { passive: true });
 updateProgress();
 
 document.getElementById('year').textContent = new Date().getFullYear();
+
+const themes = ['ocean', 'graphite', 'forest', 'violet'];
+const themeColors = { ocean: '#0a1018', graphite: '#111111', forest: '#0b130e', violet: '#120d1f' };
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', themeColors[t]);
+  try { localStorage.setItem('theme', t); } catch (e) {}
+}
+let savedTheme = 'ocean';
+try { savedTheme = localStorage.getItem('theme') || 'ocean'; } catch (e) {}
+applyTheme(themes.includes(savedTheme) ? savedTheme : 'ocean');
+document.getElementById('themeToggle')?.addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  applyTheme(themes[(themes.indexOf(cur) + 1) % themes.length]);
+});
